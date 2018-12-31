@@ -10,7 +10,7 @@ use Haijin\Tools\Dictionary;
  *
  * This is the beginning of a needed and most necessary refactor.
  * It will be much more light, adaptable and clear than the injection dependecies mechanisms, 
- * allowing to do the same as them but with more easy and in the right places and times and with
+ * allowing to do the same as them but with more ease and in the right places and times and with
  * the right contexts.
  */
 class Factory
