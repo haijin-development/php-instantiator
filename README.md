@@ -4,7 +4,7 @@ A library to create and obtain instances of objects using a simple DSL. A replac
 
 [![Latest Stable Version](https://poser.pugx.org/haijin/instantiator/version)](https://packagist.org/packages/haijin/instantiator)
 [![Latest Unstable Version](https://poser.pugx.org/haijin/instantiator/v/unstable)](https://packagist.org/packages/haijin/instantiator)
-[![Build Status](https://travis-ci.com/haijin-development/php-instantiator.svg?branch=v0.0.2)](https://travis-ci.com/haijin-development/php-instantiator)
+[![Build Status](https://travis-ci.org/haijin-development/php-instantiator.svg?branch=v0.0.2)](https://travis-ci.org/haijin-development/php-instantiator)
 [![License](https://poser.pugx.org/haijin/instantiator/license)](https://packagist.org/packages/haijin/instantiator)
 
 ### Version 0.0.1
