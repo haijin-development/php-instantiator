@@ -2,7 +2,7 @@
 
 namespace Haijin\Instantiator;
 
-class ObjectInstantiator
+class Object_Instantiator
 {
     protected $class_name;
 
@@ -13,6 +13,6 @@ class ObjectInstantiator
 
     public function with(...$params)
     {
-        return GlobalFactory::new( $this->class_name, ...$params );
+        return Global_Factory::new( $this->class_name, ...$params );
     }
 }

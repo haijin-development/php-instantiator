@@ -2,7 +2,7 @@
 
 namespace Haijin\Instantiator;
 
-class SingletonInstantiator
+class Singleton_Instantiator
 {
     protected $class_name;
     protected $key;
@@ -17,7 +17,7 @@ class SingletonInstantiator
     {
         $singleton = Create::a( $this->class_name )->with( ...$params );
 
-        GlobalFactory::set_singleton( $singleton, $this->key );
+        Global_Factory::set_singleton( $singleton, $this->key );
 
         return $singleton;
     }

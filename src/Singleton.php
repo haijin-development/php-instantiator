@@ -10,11 +10,11 @@ class Singleton
             $key = $class_name;
         }
 
-        return new SingletonInstantiator( $class_name, $key );
+        return new Singleton_Instantiator( $class_name, $key );
     }
 
     static public function of($key)
     {
-        return GlobalFactory::singleton( $key );
+        return Global_Factory::singleton( $key );
     }
 }

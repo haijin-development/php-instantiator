@@ -2,12 +2,12 @@
 
 namespace Haijin\Instantiator;
 
-use Haijin\Tools\Dictionary;
+use Haijin\Dictionary;
 
 /**
  * An global singleton of a Factory.
  */
-class GlobalFactory
+class Global_Factory
 {
     /// Class methods
 
@@ -43,4 +43,4 @@ class GlobalFactory
  * This kind of initialization instead of lazy initialization avoids race conditions and
  * is deterministic.
  */
-GlobalFactory::initialize();
+Global_Factory::initialize();

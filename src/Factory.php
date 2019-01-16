@@ -2,7 +2,7 @@
 
 namespace Haijin\Instantiator;
 
-use Haijin\Tools\Dictionary;
+use Haijin\Dictionary;
 
 /**
  * An object to create or obtain instances of objects. A replacement for 'new' with additional 
@@ -39,7 +39,7 @@ class Factory
     {
         $class_name_or_closure = $this->class_or_closure_for($class_name);
 
-        if( is_callable( $class_name_or_closure ) ) {
+        if( $class_name_or_closure instanceof \Closure ) {
             return $class_name_or_closure->call( $this, ...$params );
         }
 

@@ -1,6 +1,6 @@
 <?php
 
-use  Haijin\Instantiator\GlobalFactory;
+use  Haijin\Instantiator\Global_Factory;
 use  Haijin\Instantiator\Create;
 use  Haijin\Instantiator\Singleton;
 
@@ -8,11 +8,11 @@ $spec->describe( "A Factory", function() {
 
     $this->before_each( function() {
 
-        GlobalFactory::initialize();
+        Global_Factory::initialize();
 
     });
 
-    $this->it( "instantiating_any_object", function() {
+    $this->it( "instantiates an object", function() {
 
         $instance = Create::object( Sample::class );
 
@@ -20,7 +20,7 @@ $spec->describe( "A Factory", function() {
 
     });
 
-    $this->it( "instantiating_any_object_with_params", function() {
+    $this->it( "instantiates an object with params", function() {
 
         $instance = Create::object( SampleWithParams::class, 1, 2, 3 );
 
@@ -31,7 +31,7 @@ $spec->describe( "A Factory", function() {
  
     });
 
-    $this->it( "instantiating_any_object_with_dsl", function() {
+    $this->it( "instantiates an object with the dsl", function() {
 
         $instance = Create::a( SampleWithParams::class )->with( 1, 2, 3 );
 
@@ -43,7 +43,7 @@ $spec->describe( "A Factory", function() {
     });
 
 
-    $this->it( "instantiating_a_singleton", function() {
+    $this->it( "instantiates a singleton", function() {
 
         Singleton::create( Sample::class )->with();
 
@@ -55,7 +55,7 @@ $spec->describe( "A Factory", function() {
 
     });
 
-    $this->it( "instantiating_a_named_singleton", function() {
+    $this->it( "instantiates a named singleton", function() {
 
         Singleton::create( Sample::class, 's' )->with();
 
@@ -67,7 +67,7 @@ $spec->describe( "A Factory", function() {
 
     });
 
-    $this->it( "instantiating_a_singleton_with_dsl", function() {
+    $this->it( "instantiates a singleton with the dsl", function() {
 
         Singleton::create( SampleWithParams::class )->with( 1, 2, 3 );
 
@@ -82,7 +82,7 @@ $spec->describe( "A Factory", function() {
 
     });
 
-    $this->it( "instantiating_a_named_singleton_with_dsl", function() {
+    $this->it( "instantiates a named singleton with the dsl", function() {
 
         Singleton::create( SampleWithParams::class, 's' )->with( 1, 2, 3 );
 

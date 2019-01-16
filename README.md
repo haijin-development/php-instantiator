@@ -4,7 +4,7 @@ A library to create and obtain instances of objects using a simple DSL. A replac
 
 [![Latest Stable Version](https://poser.pugx.org/haijin/instantiator/version)](https://packagist.org/packages/haijin/instantiator)
 [![Latest Unstable Version](https://poser.pugx.org/haijin/instantiator/v/unstable)](https://packagist.org/packages/haijin/instantiator)
-[![Build Status](https://travis-ci.org/haijin-development/php-instantiator.svg?branch=v0.0.2)](https://travis-ci.org/haijin-development/php-instantiator)
+[![Build Status](https://travis-ci.org/haijin-development/php-instantiator.svg?branch=v0.0.1)](https://travis-ci.org/haijin-development/php-instantiator)
 [![License](https://poser.pugx.org/haijin/instantiator/license)](https://packagist.org/packages/haijin/instantiator)
 
 ### Version 0.0.1
@@ -100,14 +100,14 @@ $object = Singleton::of( 's' );
 It's possible to temporary change the class instantiators and singletons within the scope of a closure in the current thread with
 
 ```php
-use  Haijin\Instantiator\GlobalFactory;
+use  Haijin\Instantiator\Global_Factory;
 use  Haijin\Instantiator\Create;
 use  Haijin\Instantiator\Singleton;
 
 $object = Create::a( Sample::class )->with( 1, 2, 3 );
 ( $object instanceof Sample ) === true;
 
-GlobalFactory::with_factory_do( function($factory) 
+Global_Factory::with_factory_do( function($factory) 
 {
     $factory->set( Sample::class, DifferentSample::class );
 
@@ -125,12 +125,12 @@ GlobalFactory::with_factory_do( function($factory)
 That means that two different threads may override instantiators and singletons to their convenience at the same time. For instance, the instantiator class `Database` may be overriden as `MysqlDatabse` in one thread and as `PostgresDatabase` in another one, but the code that uses the class `Database` can be safely shared and instantiate database objects without being aware of it and with no need to pass around factory nor container objects.
 
 ```php
-use  Haijin\Instantiator\GlobalFactory;
+use  Haijin\Instantiator\Global_Factory;
 use  Haijin\Instantiator\Singleton;
 
 public function access_data_in_mysql($connection_string)
 {
-    GlobalFactory::with_factory_do( function($factory) use($connection_string)
+    Global_Factory::with_factory_do( function($factory) use($connection_string)
     {
         Singleton::create( MysqlDatabse::class, Database::class )->with( $connection_string );
 
@@ -141,7 +141,7 @@ public function access_data_in_mysql($connection_string)
 
 public function access_data_in_postgres($connection_string)
 {
-    GlobalFactory::with_factory_do( function($factory) use($connection_string)
+    Global_Factory::with_factory_do( function($factory) use($connection_string)
     {
         Singleton::create( PostgresDatabse::class, Database::class )->with( $connection_string );
 
@@ -162,5 +162,5 @@ public function process_data()
 ## Running the tests
 
 ```
-composer test
+composer specs
 ```
