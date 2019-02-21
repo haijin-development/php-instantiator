@@ -21,18 +21,27 @@ class Factory
         $this->singletons = [];
     }
 
-    public function class_or_closure_for($class_name)
+    public function class_or_closure_for($key)
     {
-        if( ! array_key_exists( $class_name, $this->instantiators ) ) {
-            return $class_name;
+        if( ! array_key_exists( $key, $this->instantiators ) ) {
+            return $key;
         }
 
-        return $this->instantiators[ $class_name ];
+        return $this->instantiators[ $key ];
     }
 
-    public function new($class_name, ...$params)
+    public function set($key, $class_or_closure)
     {
-        $class_name_or_closure = $this->class_or_closure_for($class_name);
+        if( array_key_exists( $key, $this->instantiators ) ) {
+            return;
+        }
+
+        $this->instantiators[ $key ] = $class_or_closure;
+    }
+
+    public function new($key, ...$params)
+    {
+        $class_name_or_closure = $this->class_or_closure_for( $key );
 
         if( $class_name_or_closure instanceof \Closure ) {
             return $class_name_or_closure->call( $this, ...$params );
@@ -41,12 +50,19 @@ class Factory
         return new $class_name_or_closure( ...$params );
     }
 
-    public function singleton($key)
+    public function new_as_singleton($key, $object)
+    {
+        return $this->set($key, function() use($object) {
+            return $object;
+        });
+    }
+
+    public function singleton_of($key)
     {
         return $this->singletons[ $key ];
     }
 
-    public function set_singleton($object, $key)
+    public function set_singleton($key, $object)
     {
         $this->singletons[ $key ] = $object;
 
@@ -68,10 +84,5 @@ class Factory
             $this->instantiators = $current_instantiators;
             $this->singletons = $current_singletons;
         }
-    }
-
-    public function set($class_name, $custom_class_name)
-    {
-        $this->instantiators[ $class_name ] = $custom_class_name;
     }
 }

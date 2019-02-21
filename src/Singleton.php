@@ -4,17 +4,13 @@ namespace Haijin\Instantiator;
 
 class Singleton
 {
-    static public function create($class_name, $key = null)
+    static public function create($key, $instance)
     {
-        if( $key === null ) {
-            $key = $class_name;
-        }
-
-        return new Singleton_Instantiator( $class_name, $key );
+        return Global_Factory::set_singleton( $key, $instance );
     }
 
     static public function of($key)
     {
-        return Global_Factory::singleton( $key );
+        return Global_Factory::singleton_of( $key );
     }
 }

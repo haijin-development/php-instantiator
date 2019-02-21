@@ -1,7 +1,7 @@
 {
     "minumum-stability": "dev",
     "name": "haijin/instantiator",
-    "description": "A library to create and obtain instances of objects using a simple DSL. A replacement for 'new' and for the infamous dependency injection mechanism with additional features.",
+    "description": "A library to create and obtain instances of objects using a simple DSL.",
     "keywords": ["dependency injection", "service provider", "factory"],
     "type": "library",
     "license": "MIT",

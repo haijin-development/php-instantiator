@@ -1,5 +1,7 @@
 <?php
 
+namespace Factory_Spec;
+
 use  Haijin\Instantiator\Global_Factory;
 use  Haijin\Instantiator\Create;
 use  Haijin\Instantiator\Singleton;
@@ -16,15 +18,15 @@ $spec->describe( "A Factory", function() {
 
         $instance = Create::object( Sample::class );
 
-        $this->expect( $instance instanceof Sample ) ->to() ->be() ->true();
+        $this->expect( $instance ) ->to() ->be() ->a( Sample::class );
 
     });
 
     $this->it( "instantiates an object with params", function() {
 
-        $instance = Create::object( SampleWithParams::class, 1, 2, 3 );
+        $instance = Create::object( Sample_With_Params::class, 1, 2, 3 );
 
-        $this->expect( $instance instanceof SampleWithParams ) ->to() ->be() ->true();
+        $this->expect( $instance ) ->to() ->be() ->a( Sample_With_Params::class );
         $this->expect( $instance->p1 ) ->to() ->equal( 1 );
         $this->expect( $instance->p2 ) ->to() ->equal( 2 );
         $this->expect( $instance->p3 ) ->to() ->equal( 3 );
@@ -33,67 +35,22 @@ $spec->describe( "A Factory", function() {
 
     $this->it( "instantiates an object with the dsl", function() {
 
-        $instance = Create::a( SampleWithParams::class )->with( 1, 2, 3 );
+        $instance = Create::a( Sample_With_Params::class )->with( 1, 2, 3 );
 
-        $this->expect( $instance instanceof SampleWithParams ) ->to() ->be() ->true();
+        $this->expect( $instance ) ->to() ->be() ->a( Sample_With_Params::class );
         $this->expect( $instance->p1 ) ->to() ->equal( 1 );
         $this->expect( $instance->p2 ) ->to() ->equal( 2 );
         $this->expect( $instance->p3 ) ->to() ->equal( 3 );
 
     });
 
+    $this->it( "instantiates an object from a closure", function() {
 
-    $this->it( "instantiates a singleton", function() {
+        Global_Factory::set( Sample::class, function() { return 123; } );
 
-        Singleton::create( Sample::class )->with();
+        $instance = Global_Factory::new( Sample::class );
 
-        $instance = Singleton::of( Sample::class );
-        $same_instance = Singleton::of( Sample::class );
-
-        $this->expect( $same_instance ) ->to() ->be( "===" )->than( $instance );
-        $this->expect( $instance instanceof Sample ) ->to() ->be() ->true();
-
-    });
-
-    $this->it( "instantiates a named singleton", function() {
-
-        Singleton::create( Sample::class, 's' )->with();
-
-        $instance = Singleton::of( 's' );
-        $same_instance = Singleton::of( 's' );
-
-        $this->expect( $same_instance ) ->to() ->be( "===" )->than( $instance );
-        $this->expect( $instance instanceof Sample ) ->to() ->be() ->true();
-
-    });
-
-    $this->it( "instantiates a singleton with the dsl", function() {
-
-        Singleton::create( SampleWithParams::class )->with( 1, 2, 3 );
-
-        $instance = Singleton::of( SampleWithParams::class );
-        $same_instance = Singleton::of( SampleWithParams::class );
-
-        $this->expect( $same_instance ) ->to() ->be( "===" )->than( $instance );
-        $this->expect( ( $instance instanceof SampleWithParams ) ) ->to() ->be() ->true();
-        $this->expect( $instance->p1 ) ->to() ->equal( 1 );
-        $this->expect( $instance->p2 ) ->to() ->equal( 2 );
-        $this->expect( $instance->p3 ) ->to() ->equal( 3 );
-
-    });
-
-    $this->it( "instantiates a named singleton with the dsl", function() {
-
-        Singleton::create( SampleWithParams::class, 's' )->with( 1, 2, 3 );
-
-        $instance = Singleton::of( 's' );
-        $same_instance = Singleton::of( 's' );
-
-        $this->expect( $same_instance ) ->to() ->be( "===" )->than( $instance );
-        $this->expect( ( $instance instanceof SampleWithParams ) ) ->to() ->be() ->true();
-        $this->expect( $instance->p1 ) ->to() ->equal( 1 );
-        $this->expect( $instance->p2 ) ->to() ->equal( 2 );
-        $this->expect( $instance->p3 ) ->to() ->equal( 3 );
+        $this->expect( $instance ) ->to() ->equal( 123 );
 
     });
 
@@ -103,7 +60,7 @@ class Sample
 {
 }
 
-class SampleWithParams
+class Sample_With_Params
 {
     public $p1;
     public $p2;
