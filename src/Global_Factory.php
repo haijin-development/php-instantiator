@@ -18,19 +18,29 @@ class Global_Factory
         self::$instance = new Factory();    
     }
 
-    static public function new($class_name, ...$params)
+    static public function new($key, ...$params)
     {
-        return self::$instance->new($class_name, ...$params);
+        return self::$instance->new($key, ...$params);
     }
 
-    static public function singleton($class_name)
+    static public function set($key, $class_or_closure)
     {
-        return self::$instance->singleton($class_name);
+        return self::$instance->set($key, $class_or_closure);
     }
 
-    static public function set_singleton($object, $key)
+    static public function singleton_of($key)
     {
-        return self::$instance->set_singleton($object, $key);
+        return self::$instance->singleton_of($key);
+    }
+
+    static public function set_singleton($key, $object)
+    {
+        return self::$instance->set_singleton($key, $object);
+    }
+
+    static public function new_as_singleton($key, $object)
+    {
+        return self::$instance->new_as_singleton($key, $object);
     }
 
     static public function with_factory_do($closure, $binding)
