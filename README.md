@@ -7,7 +7,7 @@ A library to create and obtain instances of objects using a simple DSL.
 [![Build Status](https://travis-ci.org/haijin-development/php-instantiator.svg?branch=master)](https://travis-ci.org/haijin-development/php-instantiator)
 [![License](https://poser.pugx.org/haijin/instantiator/license)](https://packagist.org/packages/haijin/instantiator)
 
-### Version 1.0.0
+### Version 2.0.0
 
 If you like it a lot you may contribute by [financing](https://github.com/haijin-development/support-haijin-development) its development.
 
@@ -17,7 +17,7 @@ If you like it a lot you may contribute by [financing](https://github.com/haijin
 2. [Usage](#c-2)
     1. [Creating new instances](#c-2-1)
     2. [Accessing singletons](#c-2-2)
-    3. [Overriding instantiators in the current thread](#c-2-3)
+    3. [Overriding instantiators in the current process](#c-2-3)
     4. [Overriding new instantiator with a singleton](#c-2-4)
 3. [Running the tests](#c-3)
 
@@ -32,7 +32,7 @@ Include this library in your project `composer.json` file:
 
     "require": {
         ...
-        "haijin/instantiator": "^1.0",
+        "haijin/instantiator": "^2.0",
         ...
     },
 
@@ -106,7 +106,7 @@ $object = Singleton::of( 's' );
 ```
 
 <a name="c-2-3"></a>
-### Overriding instantiators in the current thread
+### Overriding instantiators in the current process
 
 It's possible to temporary change the class instantiators and singletons within the scope of a closure in the current process with
 
