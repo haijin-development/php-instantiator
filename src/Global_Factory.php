@@ -23,9 +23,9 @@ class Global_Factory
         return self::$instance->new($key, ...$params);
     }
 
-    static public function set($key, $class_or_closure)
+    static public function set($key, $class_or_callable)
     {
-        return self::$instance->set($key, $class_or_closure);
+        return self::$instance->set($key, $class_or_callable);
     }
 
     static public function singleton_of($key)
@@ -43,9 +43,9 @@ class Global_Factory
         return self::$instance->new_as_singleton($key, $object);
     }
 
-    static public function with_factory_do($closure, $binding)
+    static public function with_factory_do($callable)
     {
-        return self::$instance->with_factory_do($closure, $binding);
+        return self::$instance->with_factory_do($callable);
     }
 }
 

@@ -2,9 +2,9 @@
 
 namespace Singleton_Spec;
 
-use  Haijin\Instantiator\Global_Factory;
-use  Haijin\Instantiator\Create;
-use  Haijin\Instantiator\Singleton;
+use Haijin\Instantiator\Global_Factory;
+use Haijin\Instantiator\Create;
+use Haijin\Instantiator\Singleton;
 
 $spec->describe( "A Factory", function() {
 

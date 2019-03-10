@@ -49,7 +49,7 @@ Include this library in your project `composer.json` file:
 Instead of using `new` to create objects use
 
 ```php
-use  Haijin\Instantiator\Create;
+use Haijin\Instantiator\Create;
 
 $object = Create::a( Sample_Class::class )->with( 1, 2, 3 );
 ```
@@ -57,7 +57,7 @@ $object = Create::a( Sample_Class::class )->with( 1, 2, 3 );
 It is also possible not to use the DSL and avoid an object creation and a few function calls with
 
 ```php
-use  Haijin\Instantiator\Create;
+use Haijin\Instantiator\Create;
 
 $object = Create::object( Sample_Class::class, 1, 2, 3 );
 ```
@@ -65,12 +65,10 @@ $object = Create::object( Sample_Class::class, 1, 2, 3 );
 or even
 
 ```php
-use  Haijin\Instantiator\Create;
+use Haijin\Instantiator\Create;
 
 $object = Global_Factory::new( Sample_Class::class, 1, 2, 3 );
 ```
-
-but we strongly encourage to always use DSLs. The philosophy behind using DSLs is to optimize expressiveness, readability and simplicity. Code optimization should always be done after benchmarking real applications in their actual contexts of use.
 
 <a name="c-2-2"></a>
 ### Accessing singletons
@@ -78,7 +76,7 @@ but we strongly encourage to always use DSLs. The philosophy behind using DSLs i
 Create singleton instances of any class with
 
 ```php
-use  Haijin\Instantiator\Singleton;
+use Haijin\Instantiator\Singleton;
 
 Singleton::create( Sample::class, new Sample( 1, 2, 3 ) );
 ```
@@ -86,7 +84,7 @@ Singleton::create( Sample::class, new Sample( 1, 2, 3 ) );
 and access them with
 
 ```php
-use  Haijin\Instantiator\Singleton;
+use Haijin\Instantiator\Singleton;
 
 $object = Singleton::of( Sample::class );
 
@@ -98,7 +96,7 @@ $object = Global_Factory::singleton_of( Sample::class );
 Singletons can also be named
 
 ```php
-use  Haijin\Instantiator\Singleton;
+use Haijin\Instantiator\Singleton;
 
 Singleton::create( 's', new Sample( 1, 2, 3 ) );
 
@@ -108,12 +106,12 @@ $object = Singleton::of( 's' );
 <a name="c-2-3"></a>
 ### Overriding instantiators in the current process
 
-It's possible to temporary change the class instantiators and singletons within the scope of a closure in the current process with
+It's possible to temporary change the class instantiators and singletons within the scope of a callable in the current process with
 
 ```php
-use  Haijin\Instantiator\Global_Factory;
-use  Haijin\Instantiator\Create;
-use  Haijin\Instantiator\Singleton;
+use Haijin\Instantiator\Global_Factory;
+use Haijin\Instantiator\Create;
+use Haijin\Instantiator\Singleton;
 
 $object = Create::a( Sample::class )->with( 1, 2, 3 );
 
@@ -162,8 +160,8 @@ $singleton = Singleton::of( 's' );
 That means that two different processes may override instantiators and singletons to their convenience at the same time. For instance, the instantiator class `Database` may be overriden as `MysqlDatabse` in one process and as `PostgresDatabase` in another one, but the code that uses the class `Database` can be safely shared and instantiate database objects without being aware of it and with no need to pass around factory nor container objects.
 
 ```php
-use  Haijin\Instantiator\Global_Factory;
-use  Haijin\Instantiator\Singleton;
+use Haijin\Instantiator\Global_Factory;
+use Haijin\Instantiator\Singleton;
 
 public function access_data_in_mysql($connection_string)
 {
@@ -203,8 +201,8 @@ The previous example had the problem that the code using a database needed to kn
 Instead, it could instantiate the database creating a new instance each time but the code using it may override the creation of a new instance with a singleton:
 
 ```php
-use  Haijin\Instantiator\Global_Factory;
-use  Haijin\Instantiator\Singleton;
+use Haijin\Instantiator\Global_Factory;
+use Haijin\Instantiator\Singleton;
 
 public function access_data_in_mysql($connection_string)
 {

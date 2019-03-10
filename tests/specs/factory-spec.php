@@ -2,9 +2,9 @@
 
 namespace Factory_Spec;
 
-use  Haijin\Instantiator\Global_Factory;
-use  Haijin\Instantiator\Create;
-use  Haijin\Instantiator\Singleton;
+use Haijin\Instantiator\Global_Factory;
+use Haijin\Instantiator\Create;
+use Haijin\Instantiator\Singleton;
 
 $spec->describe( "A Factory", function() {
 
@@ -44,7 +44,7 @@ $spec->describe( "A Factory", function() {
 
     });
 
-    $this->it( "instantiates an object from a closure", function() {
+    $this->it( "instantiates an object from a callable", function() {
 
         Global_Factory::set( Sample::class, function() { return 123; } );
 
