@@ -142,7 +142,7 @@ Global_Factory::with_factory_do( function($factory)
 
     ( $singleton instanceof Different_Sample ) === true;
 
-}, $this);
+});
 
 
 // restores the previous instantiators
@@ -171,7 +171,7 @@ public function access_data_in_mysql($connection_string)
 
         $this->process_data();
 
-    }, $this);
+    });
 }
 
 public function access_data_in_postgres($connection_string)
@@ -182,7 +182,7 @@ public function access_data_in_postgres($connection_string)
 
         $this->process_data();
 
-    }, $this);
+    });
 }
 
 public function process_data()
@@ -206,13 +206,13 @@ use Haijin\Instantiator\Singleton;
 
 public function access_data_in_mysql($connection_string)
 {
-    Global_Factory::with_factory_do( function($factory) use($connection_string)
-    {
+    Global_Factory::with_factory_do( function($factory) use($connection_string) {
+
         $factory->new_as_singleton( Database::class, new MysqlDatabase( $connection_string ) );
 
         $this->process_data();
 
-    }, $this);    
+    });
 }
 
 public function access_data_in_postgres($connection_string)
@@ -223,7 +223,7 @@ public function access_data_in_postgres($connection_string)
 
         $this->process_data();
 
-    }, $this);    
+    });
 }
 
 public function process_data()

@@ -22,7 +22,7 @@ $spec->describe( "A Factory", function() {
 
             return Create::a( Sample::class )->with();
 
-        }, $this);
+        });
 
         $this->expect( $instance ) ->to() ->be() ->a( Different_Sample::class );
 
@@ -36,7 +36,7 @@ $spec->describe( "A Factory", function() {
 
             return Create::a( Sample::class )->with();
 
-        }, $this);
+        });
 
         $another_instance = Create::a( Sample::class )->with();
 
@@ -57,9 +57,9 @@ $spec->describe( "A Factory", function() {
 
                     $this->instance = Create::a( Sample::class )->with();
 
-                }, $this);
+                });
 
-        }, $this);
+        });
 
         $this->expect( $this->instance ) ->to() ->be() ->a( Different_Sample::class );
 
