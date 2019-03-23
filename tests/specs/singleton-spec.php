@@ -80,7 +80,7 @@ $spec->describe( "A Factory", function() {
 
         Global_Factory::new_as_singleton( Sample::class, $instance );
 
-        $same_instance = Create::a( Sample::class )->with();
+        $same_instance = Create::object( Sample::class );
 
         $this->expect( $same_instance ) ->to() ->be( "===" )->than( $instance );
 

@@ -51,18 +51,10 @@ Instead of using `new` to create objects use
 ```php
 use Haijin\Instantiator\Create;
 
-$object = Create::a( Sample_Class::class )->with( 1, 2, 3 );
-```
-
-It is also possible not to use the DSL and avoid an object creation and a few function calls with
-
-```php
-use Haijin\Instantiator\Create;
-
 $object = Create::object( Sample_Class::class, 1, 2, 3 );
 ```
 
-or even
+or
 
 ```php
 use Haijin\Instantiator\Create;
@@ -113,7 +105,7 @@ use Haijin\Instantiator\Global_Factory;
 use Haijin\Instantiator\Create;
 use Haijin\Instantiator\Singleton;
 
-$object = Create::a( Sample::class )->with( 1, 2, 3 );
+$object = Create::object( Sample::class, 1, 2, 3 );
 
 ( $object instanceof Sample ) === true;
 
@@ -133,7 +125,7 @@ Global_Factory::with_factory_do( function($factory)
     Singleton::create( 's', new Different_Sample( 1, 2, 3 ) );
 
 
-    $object = Create::a( Sample::class )->with( 1, 2, 3 );
+    $object = Create::object( Sample::class, 1, 2, 3 );
 
     ( $object instanceof Different_Sample ) === true;
 
@@ -228,7 +220,7 @@ public function access_data_in_postgres($connection_string)
 
 public function process_data()
 {
-    $db = Create::a( Database::class )->with();
+    $db = Create::object( Database::class );
 
     /// etc ...
 }

@@ -33,17 +33,6 @@ $spec->describe( "A Factory", function() {
  
     });
 
-    $this->it( "instantiates an object with the dsl", function() {
-
-        $instance = Create::a( Sample_With_Params::class )->with( 1, 2, 3 );
-
-        $this->expect( $instance ) ->to() ->be() ->a( Sample_With_Params::class );
-        $this->expect( $instance->p1 ) ->to() ->equal( 1 );
-        $this->expect( $instance->p2 ) ->to() ->equal( 2 );
-        $this->expect( $instance->p3 ) ->to() ->equal( 3 );
-
-    });
-
     $this->it( "instantiates an object from a callable", function() {
 
         Global_Factory::set( Sample::class, function() { return 123; } );
