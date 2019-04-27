@@ -4,8 +4,8 @@ namespace Haijin\Instantiator;
 
 class Create
 {
-    static public function object($class_name, ...$params)
+    static public function object($className, ...$params)
     {
-        return Global_Factory::new( $class_name, ...$params );
+        return GlobalFactory::new($className, ...$params);
     }
 }

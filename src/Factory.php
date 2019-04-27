@@ -2,87 +2,106 @@
 
 namespace Haijin\Instantiator;
 
-use Haijin\Dictionary;
-
 /**
- * An object to create or obtain instances of objects. A replacement for 'new' with additional 
+ * An object to create or obtain instances of objects. A replacement for 'new' with additional
  * features.
  */
 class Factory
 {
-    /// Instance methods
-
-    public $instantiators;
-    public $singletons;
+    protected $instantiators;
+    protected $singletons;
+    protected $locked;
 
     public function __construct()
     {
         $this->instantiators = [];
         $this->singletons = [];
+        $this->locked = false;
     }
 
-    public function class_or_callable_for($key)
+    public function getClassOrCallableFor($key)
     {
-        if( ! array_key_exists( $key, $this->instantiators ) ) {
+        if (!array_key_exists($key, $this->instantiators)) {
             return $key;
         }
 
-        return $this->instantiators[ $key ];
-    }
-
-    public function set($key, $class_or_callable)
-    {
-        if( array_key_exists( $key, $this->instantiators ) ) {
-            return;
-        }
-
-        $this->instantiators[ $key ] = $class_or_callable;
+        return $this->instantiators[$key];
     }
 
     public function new($key, ...$params)
     {
-        $class_name_or_callable = $this->class_or_callable_for( $key );
+        $classNameOrCallable = $this->getClassOrCallableFor($key);
 
-        if( $class_name_or_callable instanceof \Closure ) {
-            return $class_name_or_callable->call( $this, ...$params );
+        if (is_callable($classNameOrCallable)) {
+            return $classNameOrCallable(...$params);
         }
 
-        return new $class_name_or_callable( ...$params );
+        return new $classNameOrCallable(...$params);
     }
 
-    public function new_as_singleton($key, $object)
+    public function singletonOf($key)
     {
-        return $this->set($key, function() use($object) {
-            return $object;
-        });
+        return $this->singletons[$key];
     }
 
-    public function singleton_of($key)
+    public function set($key, $classOrCallable)
     {
-        return $this->singletons[ $key ];
+        $this->validateLock();
+
+        if (array_key_exists($key, $this->instantiators)) {
+            return;
+        }
+
+        $this->instantiators[$key] = $classOrCallable;
     }
 
-    public function set_singleton($key, $object)
+    public function setSingleton($key, $object)
     {
-        $this->singletons[ $key ] = $object;
+        $this->validateLock();
+
+        $this->singletons[$key] = $object;
 
         return $this;
     }
 
-    public function with_factory_do($callable)
+    public function newAsSingleton($key, $object)
     {
-        $current_instantiators = $this->instantiators;
-        $current_singletons = $this->singletons;
+        return $this->set($key, function () use ($object) {
+            return $object;
+        });
+    }
+
+    public function withFactoryDo($callable)
+    {
+        $currentInstantiators = $this->instantiators;
+        $currentSingletons = $this->singletons;
 
         try {
 
-            return $callable( $this );
+            return $callable($this);
 
         } finally {
 
-            $this->instantiators = $current_instantiators;
-            $this->singletons = $current_singletons;
+            $this->instantiators = $currentInstantiators;
+            $this->singletons = $currentSingletons;
 
+        }
+    }
+
+    public function lock()
+    {
+        $this->locked = true;
+    }
+
+    public function isLocked()
+    {
+        return $this->locked;
+    }
+
+    protected function validateLock(): void
+    {
+        if ($this->locked) {
+            throw new LockedError('Can not override instantiators after locking the Factory object.');
         }
     }
 }

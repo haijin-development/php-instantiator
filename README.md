@@ -51,7 +51,7 @@ Instead of using `new` to create objects use
 ```php
 use Haijin\Instantiator\Create;
 
-$object = Create::object( Sample_Class::class, 1, 2, 3 );
+$object = Create::object(SampleClass::class, 1, 2, 3);
 ```
 
 or
@@ -59,7 +59,7 @@ or
 ```php
 use Haijin\Instantiator\Create;
 
-$object = Global_Factory::new( Sample_Class::class, 1, 2, 3 );
+$object = GlobalFactory::new(SampleClass::class, 1, 2, 3);
 ```
 
 <a name="c-2-2"></a>
@@ -70,7 +70,7 @@ Create singleton instances of any class with
 ```php
 use Haijin\Instantiator\Singleton;
 
-Singleton::create( Sample::class, new Sample( 1, 2, 3 ) );
+Singleton::create(Sample::class, new Sample(1, 2, 3));
 ```
 
 and access them with
@@ -78,11 +78,11 @@ and access them with
 ```php
 use Haijin\Instantiator\Singleton;
 
-$object = Singleton::of( Sample::class );
+$object = Singleton::of(Sample::class);
 
 // or
 
-$object = Global_Factory::singleton_of( Sample::class );
+$object = GlobalFactory::singletonOf(Sample::class);
 ```
 
 Singletons can also be named
@@ -90,9 +90,9 @@ Singletons can also be named
 ```php
 use Haijin\Instantiator\Singleton;
 
-Singleton::create( 's', new Sample( 1, 2, 3 ) );
+Singleton::create('s', new Sample(1, 2, 3));
 
-$object = Singleton::of( 's' );
+$object = Singleton::of('s');
 ```
 
 <a name="c-2-3"></a>
@@ -101,126 +101,130 @@ $object = Singleton::of( 's' );
 It's possible to temporary change the class instantiators and singletons within the scope of a callable in the current process with
 
 ```php
-use Haijin\Instantiator\Global_Factory;
+use Haijin\Instantiator\GlobalFactory;
 use Haijin\Instantiator\Create;
 use Haijin\Instantiator\Singleton;
 
-$object = Create::object( Sample::class, 1, 2, 3 );
+$object = Create::object(Sample::class, 1, 2, 3);
 
-( $object instanceof Sample ) === true;
+($object instanceof Sample) === true;
 
-Singleton::create( 's', new Sample( 1, 2, 3 ) );
-
-
-$singleton = Singleton::of( 's' );
-
-( $singleton instanceof Sample ) === true;
-
-Global_Factory::with_factory_do( function($factory) 
+// change the instantiators within the scope of this closure
+GlobalFactory::withFactoryDo( function($factory) 
 {
-    // change the instantiators within the scope of this closure
-
-    $factory->set( Sample::class, Different_Sample::class );
-
-    Singleton::create( 's', new Different_Sample( 1, 2, 3 ) );
-
+    $factory->set(Sample::class, DifferentSample::class);
 
     $object = Create::object( Sample::class, 1, 2, 3 );
 
-    ( $object instanceof Different_Sample ) === true;
-
-
-    $singleton = Singleton::of( 's' );
-
-    ( $singleton instanceof Different_Sample ) === true;
-
+    ( $object instanceof DifferentSample ) === true;
 });
 
-
 // restores the previous instantiators
+($object instanceof Sample) === true;
+```
 
-( $object instanceof Sample ) === true;
+```php
+use Haijin\Instantiator\GlobalFactory;
+use Haijin\Instantiator\Create;
+use Haijin\Instantiator\Singleton;
 
-Singleton::create( 's', new Sample( 1, 2, 3 ) );
-
+Singleton::create('s', new Sample(1, 2, 3));
 
 $singleton = Singleton::of( 's' );
 
-( $singleton instanceof Sample ) === true;
+($singleton instanceof Sample) === true;
+
+// change the instantiators within the scope of this closure
+GlobalFactory::withFactoryDo( function($factory) 
+{
+    Singleton::create('s', new DifferentSample(1, 2, 3));
+
+    $singleton = Singleton::of('s');
+
+    ($singleton instanceof DifferentSample) === true;
+});
+
+$singleton = Singleton::of('s');
+
+($singleton instanceof Sample) === true;
 ```
 
-That means that two different processes may override instantiators and singletons to their convenience at the same time. For instance, the instantiator class `Database` may be overriden as `MysqlDatabse` in one process and as `PostgresDatabase` in another one, but the code that uses the class `Database` can be safely shared and instantiate database objects without being aware of it and with no need to pass around factory nor container objects.
+
+That means that two different processes may override instantiators and singletons to their convenience at the same time.
+For instance, the instantiator class `Database` may be overridden as `MysqlDatabse` in one process and as `PostgresDatabase` in another one, but the code that uses the class `Database` can be safely shared and instantiate database objects without being aware of it.
+It also means that in multithreaded PHP implementations different threads might override its instantiators without collisions.
+
 
 ```php
-use Haijin\Instantiator\Global_Factory;
+use Haijin\Instantiator\GlobalFactory;
 use Haijin\Instantiator\Singleton;
 
-public function access_data_in_mysql($connection_string)
+public function accessDataInMysql($connectionString)
 {
-    Global_Factory::with_factory_do( function($factory) use($connection_string)
+    GlobalFactory::withFactoryDo(function($factory) use($connectionString)
     {
-        Singleton::create( Database::class, new MysqlDatabase( $connection_string ) );
+        Singleton::create(Database::class, new MysqlDatabase($connectionString));
 
-        $this->process_data();
+        $this->processData();
 
     });
 }
 
-public function access_data_in_postgres($connection_string)
+public function accessDataInPostgres($connectionString)
 {
-    Global_Factory::with_factory_do( function($factory) use($connection_string)
+    GlobalFactory::withFactoryDo(function($factory) use($connectionString)
     {
-        Singleton::create( Database::class, new PostgresDatabase( $connection_string ) );
+        Singleton::create(Database::class, new PostgresDatabase($connectionString));
 
-        $this->process_data();
+        $this->processData();
 
     });
 }
 
-public function process_data()
+public function processData()
 {
-    $db = Singleton::of( Database::class );
+    $db = Singleton::of(Database::class);
 
     /// etc ...
 }
 ```
 
 <a name="c-2-4"></a>
-### Overriding new instantiator with a singleton
+### Overriding the `new` instantiator with a singleton
 
 The previous example had the problem that the code using a database needed to know that it was a singleton. That is a big assumption to do for a library.
 
 Instead, it could instantiate the database creating a new instance each time but the code using it may override the creation of a new instance with a singleton:
 
 ```php
-use Haijin\Instantiator\Global_Factory;
+use Haijin\Instantiator\GlobalFactory;
 use Haijin\Instantiator\Singleton;
 
-public function access_data_in_mysql($connection_string)
+public function accessDataInMysql($connectionString)
 {
-    Global_Factory::with_factory_do( function($factory) use($connection_string) {
+    GlobalFactory::withFactoryDo(function($factory) use($connectionString) {
 
-        $factory->new_as_singleton( Database::class, new MysqlDatabase( $connection_string ) );
+        $factory->newAsSingleton(Database::class, new MysqlDatabase($connectionString));
 
-        $this->process_data();
+        $this->processData();
 
     });
 }
 
-public function access_data_in_postgres($connection_string)
+public function accessDataInPostgres($connectionString)
 {
-    Global_Factory::with_factory_do( function($factory) use($connection_string)
+    GlobalFactory::withFactoryDo(function($factory) use($connectionString)
     {
-        $factory->new_as_singleton( Database::class, new PostgresDatabase( $connection_string ) );
+        $factory->newAsSingleton(Database::class, new PostgresDatabase($connectionString));
 
-        $this->process_data();
+        $this->processData();
 
     });
 }
 
-public function process_data()
+public function processData()
 {
-    $db = Create::object( Database::class );
+    $db = Create::object(Database::class);
 
     /// etc ...
 }
@@ -234,5 +238,14 @@ Overriding the creation of an instance by a singleton should be done only if it 
 ## Running the tests
 
 ```
+composer specs
+```
+
+Or if you want to run the tests using a Docker with PHP 7.2:
+
+```
+sudo docker run -ti -v $(pwd):/home/php-instantiator --rm --name php-instantiator haijin/php-dev:7.2 bash
+cd /home/php-instantiator/
+composer install
 composer specs
 ```
